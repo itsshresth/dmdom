@@ -1,7 +1,11 @@
 # Cold DM Personalizer
 
 ##DEMO VIDEO
-(https://github.com/itsshresth/dmdom/blob/main/d90058b8-fdfa-4774-95d3-fec6727c3558.mp4)
+
+
+https://github.com/user-attachments/assets/05f362fd-0091-48a5-b9a5-c6fb3420bc01
+
+3-fec6727c3558.mp4
 
 
 Generate ultra-personalized cold DMs for Twitter users using real-time profile data and Alchemyst AI.
