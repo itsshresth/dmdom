@@ -118,24 +118,48 @@ Generate ultra-personalized cold DMs for Twitter users using real-time profile d
 
 ---
 
-## Security
+## Architecture
+```mermaid
+flowchart TD
+    subgraph Frontend [React + Tailwind - client]
+        A1[User enters Twitter handle & motive]
+        A2[InputForm.jsx sends POST to /api/personalize]
+        A3[Streams AI thinking & DM to OutputCard.jsx]
+        A1 --> A2 --> A3
+    end
 
-- **.env** files are gitignored and never committed.
-- Example env files (`.env.example`) are provided for collaborators.
-- Never share your real API keys publicly.
+    subgraph Backend [Express.js API - server]
+        B1[API Personalize Receives Request]
+        B2{Twitter API Key Present?}
+        B3[Fetch Real Twitter Bio & Tweets]
+        B4[Fallback to Enhanced Mock Data]
+        B5[Build Personalized Prompt]
+        B6[Send Prompt to Alchemyst AI Chat API]
+        B7[Stream AI Thinking & DM to Frontend]
+        B1 --> B2
+        B2 -- Yes --> B3 --> B5
+        B2 -- No/API Fail --> B4 --> B5
+        B5 --> B6 --> B7
+    end
 
----
+    subgraph AlchemystAI [Alchemyst AI]
+        C1[Receives Prompt]
+        C2[Streams Thinking & Final DM]
+        C1 --> C2
+    end
 
-## Contributing
+    subgraph TwitterAPI [Twitter API]
+        D1[Profile & Tweets Data]
+    end
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+    A2 -.->|POST /api/personalize| B1
+    B3 --fetches--> D1
+    B6 -.->|POST| C1
+    C2 -.->|SSE Stream| B7
+    B7 -.->|SSE Stream| A3
 
----
 
+```
 ## License
 
 This project is licensed under the MIT License.
